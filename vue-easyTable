@@ -1,0 +1,99 @@
+<template>
+  <div>
+    <el-table
+      :data="tableData"
+      style="width: 100%;"
+      :max-height="tableHeight"
+      :row-class-name="tableRowClassName"
+    >
+      <el-table-column
+        label="序号"
+        type="index"
+        width="50"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        v-for="item in tableColumn"
+        :key="item.id"
+        :prop="item.prop"
+        :label="item.label"
+        :width="item.width"
+      ></el-table-column>
+    </el-table>
+    <div class="pagination">
+      <slot name="chartShow"></slot>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 40, 60, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalNum"
+      >
+      </el-pagination>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    tableData: {
+      type: Array,
+      require: true
+    },
+    tableColumn: {
+      type: Array,
+      require: true
+    },
+    tableHeight: {
+      type: Number,
+      require: true
+    }
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 100,
+      totalNum: 400
+    };
+  },
+  mounted() {},
+  methods: {
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return "success-row";
+      }
+      return "";
+    },
+    handleSizeChange(val) {
+      console.log(`每页${val}条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页：${val}`);
+    }
+  }
+};
+</script>
+
+<style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
+</style>
+
+<style scoped>
+.pagination {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+</style>
